@@ -2284,7 +2284,11 @@ set_new_duty_full:
 set_new_duty_zero:
 		; Power off
 		cbr	flags1, (1<<FULL_POWER)+(1<<POWER_ON)
-		rjmp	set_new_duty_set
+		ldi	temp4, pwm_off		; Skip the on phase entirely
+		.if COMP_PWM
+		set				; Skip complementary PWM
+		.endif
+		rjmp	set_new_duty21
 ;-----bko-----------------------------------------------------------------
 ; Multiply the 24-bit timing in temp1:temp2:temp3 by temp4 and add the top
 ; 24-bits to YL:YH:temp7.
@@ -2676,7 +2680,6 @@ start_from_running:
 		set_comp_phase_c temp1
 		cli
 		cbr	flags2, ALL_FETS
-		sbrc	flags1, POWER_ON
 		sbr	flags2, (1<<B_FET)
 		.if COMP_PWM
 		CpFET_off
@@ -2694,7 +2697,6 @@ start_from_running:
 		set_comp_phase_b temp1
 		cli
 		cbr	flags2, ALL_FETS
-		sbrc	flags1, POWER_ON
 		sbr	flags2, (1<<C_FET)
 		.if COMP_PWM
 		BpFET_off
@@ -2728,7 +2730,6 @@ start_from_running:
 		set_comp_phase_b temp1
 		cli
 		cbr	flags2, ALL_FETS
-		sbrc	flags1, POWER_ON
 		sbr	flags2, (1<<A_FET)
 		.if COMP_PWM
 		BpFET_off
@@ -2746,7 +2747,6 @@ start_from_running:
 		set_comp_phase_a temp1
 		cli
 		cbr	flags2, ALL_FETS
-		sbrc	flags1, POWER_ON
 		sbr	flags2, (1<<B_FET)
 		.if COMP_PWM
 		ApFET_off
@@ -2780,7 +2780,6 @@ start_from_running:
 		set_comp_phase_a temp1
 		cli
 		cbr	flags2, ALL_FETS
-		sbrc	flags1, POWER_ON
 		sbr	flags2, (1<<C_FET)
 		.if COMP_PWM
 		ApFET_off
@@ -2798,7 +2797,6 @@ start_from_running:
 		set_comp_phase_c temp1
 		cli
 		cbr	flags2, ALL_FETS
-		sbrc	flags1, POWER_ON
 		sbr	flags2, (1<<A_FET)
 		.if COMP_PWM
 		CpFET_off
