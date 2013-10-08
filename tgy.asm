@@ -1382,7 +1382,7 @@ osccal_set:
 .if CPU_MHZ == 16
 		ldi	temp1, 0xff		; Almost 16MHz
 .else
-		ldi	temp1, 0x9f		; Almost 8MHz
+		ldi	temp1, 0xa6		; Almost 8MHz
 .endif
 		out	OSCCAL, temp1
 		ret
@@ -3183,7 +3183,9 @@ init_no_extrf:
 
 		sbrs	temp7, WDRF		; Watchdog reset
 		rjmp	init_no_wdrf
-init_wdrf1:	rcall	beep_f1			; "siren"
+init_wdrf1:     rjmp	control_start           ; avoid siren loop, just restart	
+
+                rcall	beep_f1			; "siren"
 		rcall	beep_f1
 		rcall	beep_f3
 		rcall	beep_f3
