@@ -1,3 +1,12 @@
+Branch Notes
+------------
+
+The integrated-16MHz branch is used to pogram ESC 1,2,4 on the HobbyKing 
+Integrated PCB Quadcopter Frame 235mm
+
+http://hobbyking.com/hobbyking/store/__22319__Micro_Integrated_PCB_w_ESCs_Quadcopter_Frame_235mm_KIT_.html
+
+---------------------------------------------------------------------
 https://github.com/sim-/tgy
 
 This tree contains Atmel AVR assembly code for ATmega-based 3-phase
