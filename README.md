@@ -1,3 +1,18 @@
+Branch Notes
+------------
+
+The integrated-8MHz branch is used to pogram ESC 3 on the HobbyKing 
+Integrated PCB Quadcopter Frame 235mm
+
+http://hobbyking.com/hobbyking/store/__22319__Micro_Integrated_PCB_w_ESCs_Quadcopter_Frame_235mm_KIT_.html
+
+This ESC has a Atmega8L processor that can only run at 8MHz. When 
+testing the Sep 20, 2013 version of tgy I found sync issues. This
+branch was branched from a April 27, 2012 commit. This early version 
+will hopefully work better with the ESC @8MHz.
+
+---------------------------------------------------------------------
+
 https://github.com/sim-/tgy
 
 This tree contains Atmel AVR assembly code for AVR-based 3-phase
