@@ -160,7 +160,7 @@
 .equ	TIMING_RUN	= 0x1000 ; 1024us per commutation
 .equ	TIMING_RANGE1	= 0x4000 ; 4096us per commutation
 .equ	TIMING_RANGE2	= 0x2000 ; 2048us per commutation
-.equ	TIMING_MAX	= 0x0050 ; 20us per commutation
+.equ	TIMING_MAX	= 0x00e0 ; 56us per commutation
 
 .equ	timeoutSTART	= 48000 ; 48ms per commutation
 .equ	timeoutMIN	= 36000	; 36ms per commutation
@@ -454,7 +454,8 @@ init_no_borf:
 init_no_extrf:
 		sbrs	i_sreg, WDRF		; Watchdog reset
 		rjmp	init_no_wdrf
-init_wdrf1:	rcall	beep_f1			; "siren"
+init_wdrf1:	rjmp	control_start           ; Skip siren just restart.
+                rcall	beep_f1			; "siren"
 		rcall	beep_f1
 		rcall	beep_f3
 		rcall	beep_f3
@@ -851,7 +852,7 @@ osccal_set:
 .if CPU_MHZ == 16
 		ldi	temp1, 0xff		; Almost 16MHz
 .else
-		ldi	temp1, 0x9f		; Almost 8MHz
+		ldi	temp1, 0xa6		; Almost 8MHz
 .endif
 		out	OSCCAL, temp1
 		ret

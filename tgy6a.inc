@@ -10,7 +10,7 @@
 ;* http://home.versanet.de/~b-konze/blc_6a/blc_6a.htm                   *
 ;************************************************************************
 
-.equ	F_CPU		= 16000000
+.equ	F_CPU		= 8000000
 .equ	USE_INT0	= 1
 .equ	USE_I2C		= 0
 .equ	USE_UART	= 0
