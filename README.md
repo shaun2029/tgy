@@ -4,6 +4,8 @@ Branch Notes
 The hk-10A-261000002 branch is used to pogram HobbyKing 10A ESC 261000002 
 integrated into my PCB Quadcopter Frame 235mm
 
+For the HobbyKing 10A ESC 261000002 use bs.hex
+
 http://hobbyking.com/hobbyking/store/uh_viewItem.asp?idProduct=29550
 http://hobbyking.com/hobbyking/store/__22319__Micro_Integrated_PCB_w_ESCs_Quadcopter_Frame_235mm_KIT_.html
 
