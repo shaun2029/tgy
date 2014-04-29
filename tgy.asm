@@ -226,6 +226,8 @@
 .endif
 
 .equ	MAX_POWER	= (POWER_RANGE-1)
+.equ	OUTPUT_POWER	= (MAX_POWER/2)   ; Set power output
+
 .equ	PWR_COOL_START	= (POWER_RANGE/24) ; Power limit while starting to reduce heating
 .equ	PWR_MIN_START	= (POWER_RANGE/6) ; Power limit while starting (to start)
 .equ	PWR_MAX_START	= (POWER_RANGE/4) ; Power limit while starting (if still not running)
@@ -1854,6 +1856,8 @@ adc_wait:	sbic	ADCSRA, ADSC
 ; internal RC slows down when hot, making it impossible to reach full
 ; throttle.
 evaluate_rc_init:
+        rjmp	evaluate_rc_puls
+
 		.if USE_UART
 		sbrc	flags1, UART_MODE
 		rjmp	evaluate_rc_uart
@@ -1954,6 +1958,10 @@ evaluate_rc:
 ;-----bko-----------------------------------------------------------------
 .if USE_ICP || USE_INT0
 evaluate_rc_puls:
+                ; Load OUTPUT_POWER and set the duty cycle
+                ldi2	YL, YH, OUTPUT_POWER
+                rjmp    rc_duty_set  ; Skip reload into YL:YH
+
 		cbr	flags1, (1<<EVAL_RC)+(1<<REVERSE)
 		.if MOTOR_BRAKE || LOW_BRAKE
 		sts	brake_want, ZH
@@ -2587,8 +2595,6 @@ i_rc_puls1:	clr	rc_timeout
 i_rc_puls2:	wdr
 		.if defined(HK_PROGRAM_CARD)
 		.endif
-		sbrc	flags1, EVAL_RC
-		rjmp	i_rc_puls_rx
 		.if BOOT_JUMP
 		rcall	boot_loader_test
 		.endif
@@ -2605,10 +2611,8 @@ i_rc_puls_rx:	rcall	evaluate_rc_init
 		lds	YL, rc_duty_l
 		lds	YH, rc_duty_h
 		adiw	YL, 0			; Test for zero
-		brne	i_rc_puls1
 		ldi	temp1, 10		; wait for this count of receiving power off
 		cp	rc_timeout, temp1
-		brlo	i_rc_puls2
 		.if USE_I2C
 		sbrs	flags1, I2C_MODE
 		out	TWCR, ZH		; Turn off I2C and interrupt
@@ -2624,10 +2628,6 @@ i_rc_puls_rx:	rcall	evaluate_rc_init
 		rcp_int_disable temp1		; Turn off RC pulse interrupt
 i_rc_puls3:
 		.endif
-
-		rcall	beep_f4			; signal: rcpuls ready
-		rcall	beep_f4
-		rcall	beep_f4
 
 	; Fall through to restart_control
 ;-----bko-----------------------------------------------------------------
@@ -2677,7 +2677,6 @@ set_brake_duty:	ldi2	temp1, temp2, MAX_POWER
 
 wait_for_power_on:
 		wdr
-		sbrc	flags1, EVAL_RC
 		rjmp	wait_for_power_rx
 		tst	rc_timeout
 		brne	wait_for_power_on	; Tight loop unless rc_timeout is zero
@@ -2701,9 +2700,7 @@ wait_for_power_rx:
 		.endif
 		rcall	evaluate_rc		; Only get rc_duty, don't set duty
 		adiw	YL, 0			; Test for zero
-		breq	wait_for_power_on_init
 		tst	rc_timeout
-		breq	wait_for_power_on_init
 
 start_from_running:
 		rcall	switch_power_off
