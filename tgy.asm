@@ -226,7 +226,7 @@
 .endif
 
 .equ	MAX_POWER	= (POWER_RANGE-1)
-.equ	OUTPUT_POWER	= (MAX_POWER/2)   ; Set power output
+.equ	OUTPUT_POWER	= (MAX_POWER)   ; Set power output to 100%
 
 .equ	PWR_COOL_START	= (POWER_RANGE/24) ; Power limit while starting to reduce heating
 .equ	PWR_MIN_START	= (POWER_RANGE/6) ; Power limit while starting (to start)
