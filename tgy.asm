@@ -1344,7 +1344,7 @@ eeprom_check_reset:
 		lds	temp2, eeprom_sig_h
 		subi	temp1, low(EEPROM_SIGN)
 		sbci	temp2, high(EEPROM_SIGN)
-		breq	eeprom_good
+;;		breq	eeprom_good
 
 	; Signature not good: set defaults in RAM, but do not write
 	; to the EEPROM until we actually set something non-default
@@ -2601,12 +2601,12 @@ i_rc_puls2:	wdr
 		.if BEACON
 		lds	temp1, rct_beacon
 		cpi	temp1, 120		; Beep every 120 * 16 * 65536us (~8s)
-		brne	i_rc_puls2
+;;;		brne	i_rc_puls2
 		ldi	temp1, 60
 		sts	rct_beacon, temp1	; Double rate after the first beep
 		rcall	beep_f3			; Beacon
 		.endif
-		rjmp	i_rc_puls2
+;;;		rjmp	i_rc_puls2
 i_rc_puls_rx:	rcall	evaluate_rc_init
 		lds	YL, rc_duty_l
 		lds	YH, rc_duty_h
